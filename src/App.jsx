@@ -6,6 +6,7 @@ import Register from "./Page/Register.jsx"
 import MyProperty from "./Page/MyProperty.jsx"
 import PrivateRoute from "./Components/PrivateRoute.jsx"
 import AddProperty from "./Page/AddProperty.jsx"
+import UpdateProperty from "./Page/UpdateProperty.jsx"
 function App() {
 
 const router = createBrowserRouter(
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register/>}/>
       <Route path="my-property" element={<PrivateRoute><MyProperty/></PrivateRoute>}/>
       <Route path="add-property" element={<PrivateRoute><AddProperty/></PrivateRoute>}/>
+      <Route path="update-property" element={<PrivateRoute><UpdateProperty/></PrivateRoute>}/>
     </Route>
 
 

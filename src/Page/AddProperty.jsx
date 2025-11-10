@@ -226,7 +226,7 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
           <div className="flex gap-3">
             <button type="button" onClick={() => { setForm({ propertyName: "", description: "", category: "For Sale", price: "", location: "", imageUrl: "" }); setPreviewSrc(""); setErrors({}); }} className="rounded-lg px-4 h-12 border border-gray-300 dark:border-gray-300 bg-white dark:bg-gray-200 text-base font-medium hover:cursor-pointer">Reset</button>
 
-            <button type="submit" disabled={submitting} className="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-wide hover:bg-blue-400 bg-blue-400 transition-colors">
+            <button type="submit" disabled={submitting} className="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 md:px-6 bg-primary text-white text-md  md:text-base font-bold leading-normal tracking-wide hover:bg-blue-400 bg-blue-400 transition-colors">
               {submitting ? "Adding..." : "Add Property"}
             </button>
           </div>
