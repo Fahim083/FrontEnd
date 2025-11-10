@@ -1,7 +1,7 @@
 import React from 'react'
 import LoadingSpiner from './LoadingSpiner'
 import { Navigate, useLocation } from 'react-router'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../Context/AuthContext'
 const PrivateRoute = ({children}) => {
    const location = useLocation
     // console.log(location)
