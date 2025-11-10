@@ -12,7 +12,7 @@ import { useAuth } from "../Context/AuthContext";
 
 
 const Register = () => {
-  const [showPass, setshowPass] = useState(false);
+  const [showPass, setshowPass] = useState(true);
   const navigate = useNavigate();
   const { setLoading, createEmailUser, userInfoUpdate, googleUser } = useAuth();
 

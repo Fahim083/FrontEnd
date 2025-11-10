@@ -9,7 +9,7 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import image from "../assets/1.png";
 
 const LoginPage = () => {
-    const [showPass, setshowPass] = useState(false);
+    const [showPass, setshowPass] = useState(true);
    const location = useLocation();
     const navigate = useNavigate();
     const from = location?.state || "/";
