@@ -1,9 +1,80 @@
 import React from "react";
 import { Link } from "react-router";
 import image from "../assets/2.png";
+import { toast } from "react-hot-toast";
+import { useNavigate} from "react-router"
+
+
+import { FaRegEye } from "react-icons/fa6";
+import { FaRegEyeSlash } from "react-icons/fa6";
+import { useState } from "react";
+import { useAuth } from "../Context/AuthContext";
 
 
 const Register = () => {
+  const [showPass, setshowPass] = useState(false);
+  const navigate = useNavigate();
+  const { setLoading, createEmailUser, userInfoUpdate, googleUser } = useAuth();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.username.value;
+    const url = form.url.value;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    console.log(name, url, email, password,);
+    const userInfo = {
+      displayName: name,
+      photoURL: url,
+    };
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+    if (!/(?=.*[a-z])/.test(password)) {
+      toast.error("Password must contain a lowercase letter");
+      return;
+    }
+    if (!/(?=.*[A-Z])/.test(password)) {
+       toast.error("Password must contain an uppercase letter");
+      return;
+    }
+    createEmailUser(email, password)
+      .then((user) => {
+        console.log(user);
+        userInfoUpdate(userInfo)
+          .then(() => {
+            setLoading(false);
+            toast.success("Profile Updated Successfully");
+            navigate("/");
+          })
+          .catch((e) => {
+            toast.error("Failed to Update Profile");
+            console.log(e);
+          });
+      })
+      .catch((e) => {
+        setLoading(false);
+        toast.error(e.message);
+        //
+        // alert(e.message);
+      });
+  };
+
+  const handleGoogleSignup = () => {
+    googleUser()
+      .then((user) => {
+        setLoading(false);
+        navigate("/");
+        toast.success("Google Sign Up Successful");
+      })
+      .catch((e) => {
+        toast.error("Google Sign Up Failed");
+        console.log(e);
+      });
+  };
   return (
     <div className="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark min-h-screen flex flex-col">
 
@@ -24,7 +95,7 @@ const Register = () => {
             <div className="w-full max-w-md lg:w-1/2 xl:w-auto xl:flex-1 xl:max-w-lg">
               <div className="bg-gray-100 dark:bg-form-bg-dark p-8 md:p-10 rounded-xl shadow-lg">
                 <div className="text-center md:text-left mb-8">
-                  <h1 className="text-2xl xs:text-3xl font-black tracking-tight text-text-light dark:text-text-dark">
+                  <h1 className="text-2xl md:text-4xl font-black tracking-tight text-text-light dark:text-text-dark">
                     Create Your HomeNest Account
                   </h1>
                   <p className="mt-2 text-base text-gray-500 text-text-muted-light dark:text-text-muted-dark">
@@ -32,23 +103,25 @@ const Register = () => {
                   </p>
                 </div>
 
-                <form className="flex flex-col gap-5">
+                <form className="flex flex-col gap-5 " onSubmit={handleSubmit}>
                   <label className="flex flex-col">
                     <p className="text-sm font-medium pb-2">Full Name</p>
                     <input
                       type="text"
+                      name="username"
                       placeholder="Enter your full name"
-                      className="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 h-12 p-3 text-base placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark transition-colors"
-                    />
+                        className="form-input flex w-full resize-none overflow-hidden rounded-lg text-neutral-text-light dark:text-neutral-text-darkfocus:ring-2 border  border-gray-300 dark:border-gray-300 bg-white dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal"
+                  />
                   </label>
 
                   <label className="flex flex-col">
                     <p className="text-sm font-medium pb-2">Email Address</p>
                     <input
                       type="email"
+                      name="email"
                       placeholder="Enter your email address"
-                      className="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 h-12 p-3 text-base placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark transition-colors"
-                    />
+                       className="form-input flex w-full resize-none overflow-hidden rounded-lg text-neutral-text-light dark:text-neutral-text-darkfocus:ring-2 border  border-gray-300 dark:border-gray-300 bg-white dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal"
+                  />
                   </label>
 
                   <label className="flex flex-col">
@@ -60,26 +133,27 @@ const Register = () => {
                     </p>
                     <input
                       type="url"
+                      name="url"
                       placeholder="https://..."
-                      className="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 h-12 p-3 text-base placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark transition-colors"
-                    />
+                     className="form-input flex w-full resize-none overflow-hidden rounded-lg text-neutral-text-light dark:text-neutral-text-darkfocus:ring-2 border  border-gray-300 dark:border-gray-300 bg-white dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal"
+                  />
                   </label>
 
                   <label className="flex flex-col">
                     <p className="text-sm font-medium pb-2">Password</p>
                     <div className="relative">
                       <input
-                        type="password"
+                        type={showPass ? "password" : "text"}
+                        name="password"
                         placeholder="Enter your password"
-                        className="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 h-12 p-3 pr-10 text-base placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark transition-colors"
-                      />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-text-muted-light dark:text-text-muted-dark"
-                      >
-                        <span className="material-symbols-outlined">
-                          visibility
-                        </span>
+                           className="form-input flex w-full resize-none overflow-hidden rounded-lg text-neutral-text-light dark:text-neutral-text-darkfocus:ring-2 border  border-gray-300 dark:border-gray-300 bg-white dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal"
+                  />
+                      <button type="button" onClick={() => setshowPass(!showPass)}>
+                        {!showPass ? (
+                          <FaRegEyeSlash className="absolute right-5 top-4.5 sm:right-10   cursor-pointer text-gray-400" />
+                        ) : (
+                          <FaRegEye className="absolute right-5 top-4.5 sm:right-10  cursor-pointer text-gray-400" />
+                        )}
                       </button>
                     </div>
                   </label>
@@ -108,6 +182,7 @@ const Register = () => {
 
                   <button
                     type="submit"
+                    
                     className="mt-4 w-full rounded-lg h-12 px-4 bg-violet-500 text-white text-base font-bold hover:bg-primary/90 transition-colors hover:cursor-pointer hover:bg-violet-600 "
                   >
                     Create Account
@@ -124,7 +199,9 @@ const Register = () => {
                 </div>
 
                 {/* Google Button */}
-                <button className="flex w-full items-center justify-center gap-2 rounded-lg h-12 px-4 bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-300 text-text-light dark:text-text-dark text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors hover:cursor-pointer hover:text-white ">
+                <button 
+                onClick={handleGoogleSignup}
+                className="flex w-full items-center justify-center gap-2 rounded-lg h-12 px-4 bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-300 text-text-light dark:text-text-dark text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors hover:cursor-pointer hover:text-white ">
                   <svg
                     className="h-5 w-5"
                     fill="none"

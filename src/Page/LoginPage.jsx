@@ -1,8 +1,54 @@
-import { Link } from "react-router";
+import { useState } from "react";
+import { Link,useLocation, useNavigate } from "react-router";
+// import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "../Context/AuthContext";
+import { toast } from "react-hot-toast";
+import { FaRegEye } from "react-icons/fa6";
+import { FaRegEyeSlash } from "react-icons/fa6";
 
 import image from "../assets/1.png";
 
 const LoginPage = () => {
+    const [showPass, setshowPass] = useState(false);
+   const location = useLocation();
+    const navigate = useNavigate();
+    const from = location?.state || "/";
+    const { emailUserSignIn, googleUser, setLoading } = useAuth();
+    const handleEmailLogin = (e) => {
+      e.preventDefault();
+      // console.log(from)
+      const form = e.target;
+      const email = form.email.value;
+      const password = form.password.value;
+      // console.log(email, password);
+      emailUserSignIn(email, password)
+        .then((user) => {
+          setLoading(false);
+          // console.log(from)
+          toast.success("Login Successful");
+          navigate(from);
+
+        })
+        .catch((error) => {
+          setLoading(false);
+          toast.error(error.message);
+          // alert(error.message);
+        });
+    };
+
+      const handleGooglelogin = () => {
+      googleUser()
+        .then((user) => {
+          setLoading(false);
+          toast.success("Google Login Successful");
+          navigate(from);
+        })
+        .catch((error) => {
+          setLoading(false);
+          toast.error(error.message);
+        });
+    };
+
   return (
     <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden bg-background-light dark:bg-background-dark text-neutral-text-light dark:text-neutral-text-dark font-display">
 
@@ -20,13 +66,14 @@ const LoginPage = () => {
                   Sign in to access your account and saved properties.
                 </p>
               </div>
-              <form className="flex flex-col gap-6">
+              <form className="flex flex-col gap-6" onSubmit={handleEmailLogin}>
                 <label className="flex flex-col w-full">
                   <p className="text-neutral-text-light dark:text-neutral-text-dark text-sm font-medium pb-2">
                     Email Address
                   </p>
                   <input
                     type="email"
+                    name="email"
                     placeholder="Enter your email"
                     className="form-input flex w-full resize-none overflow-hidden rounded-lg text-neutral-text-light dark:text-neutral-text-darkfocus:ring-2 border  border-gray-300 dark:border-gray-300 bg-white dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal"
                   />
@@ -35,18 +82,20 @@ const LoginPage = () => {
                   <p className="text-neutral-text-light dark:text-neutral-text-dark text-sm font-medium pb-2">
                     Password
                   </p>
-                  <div className="relative w-full">
+                  <div className="relative w-full ">
                     <input
-                      type="password"
+                      type={showPass ? "password" : "text"}
+                      name="password"
                       placeholder="Enter your password"
                        className="form-input flex w-full resize-none overflow-hidden rounded-lg text-neutral-text-light dark:text-neutral-text-darkfocus:ring-2 border  border-gray-300 dark:border-gray-300 bg-white dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 text-base font-normal"
                   />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 dark:text-gray-500 hover:text-primary dark:hover:text-accent"
-                    >
-                      <span className="material-symbols-outlined">visibility</span>
-                    </button>
+                    <button type="button" onClick={() => setshowPass(!showPass)}>
+                        {!showPass ? (
+                          <FaRegEyeSlash className="absolute right-5 top-4.5 sm:right-10   cursor-pointer text-gray-400" />
+                        ) : (
+                          <FaRegEye className="absolute right-5 top-4.5 sm:right-10  cursor-pointer text-gray-400" />
+                        )}
+                      </button>
                   </div>
                 </label>
                 <div className="flex flex-col gap-4 mt-2">
@@ -57,6 +106,7 @@ const LoginPage = () => {
                     <span className="truncate">Log In</span>
                   </button>
                   <button
+                  onClick={handleGooglelogin}
                     type="button"
                     className="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-white dark:bg-background-dark text-neutral-text-light dark:text-neutral-text-dark border border-gray-300  dark:border-gray-300 text-base font-bold tracking-wide hover:bg-gray-50 dark:hover:bg-neutral-border-dark gap-2"
                   >
@@ -90,7 +140,7 @@ const LoginPage = () => {
                     <span className="truncate">Log In with Google</span>
                   </button>
                 </div>
-                <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
+                <p className="text-center text-sm mt-4">
                   Don't have an account?{" "}
                   <Link
                     to="/register"
