@@ -19,14 +19,14 @@ const AllPropertyCard = ({property,idx}) => {
                     <p className="text-gray-500 dark:text-gray-500 text-sm font-normal leading-normal mt-1">
                       {property.location}
                     </p>
-                    <p className="text-gray-900 dark:text-black text-lg font-bold leading-normal mt-2">
+                    <p className="text-[rgb(37,89,137)] dark:text-[rgb(37,89,137)] text-lg font-bold leading-normal mt-2">
                       {property.price}
                     </p>
-                    <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-300 flex items-center justify-between">
+                    <div className="mt-4 flex items-center justify-between">
                       {/* <p className="text-gray-500 dark:text-gray-400 text-xs">
                         Posted by {property.postedBy}
                       </p> */}
-                      <button className="text-sm font-bold text-primary hover:underline cursor-pointer">
+                      <button className=" text-md font-bold text-[rgb(37,89,137)]  bg-[rgb(207,221,231)] rounded-lg py-2  hover:bg-[rgb(190,210,225)] cursor-pointer w-full text-center">
                         See Details
                       </button>
                     </div>
