@@ -131,7 +131,7 @@ const PropertyDetails = () => {
                   className="w-full rounded-lg border-gray-300 dark:border-gray-300 bg-gray-100 dark:bg-gray-100 p-3 focus:ring-primary focus:border-primary text-sm text-gray-700 dark:text-gray-700 mt-4 min-h-24" 
                   placeholder="Share your experience..."
                 ></textarea>
-                <button className="mt-3 h-10 px-4 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-600 transition-colors hover:cursor-pointer">
+                <button className="mt-3 h-10 px-4 rounded-lg text-[15px] bg-blue-500 text-white font-bold hover:bg-blue-600 transition-colors hover:cursor-pointer">
                   Submit Review
                 </button>
               </div>
