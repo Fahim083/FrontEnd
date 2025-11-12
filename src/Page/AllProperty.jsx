@@ -5,6 +5,8 @@ import { useEffect,useState } from "react";
 
 const AllProperty = () => {
     const [properties, setProperties] = useState([]);
+    const [filterproperties, setfilterProperties] = useState([]);
+    const [value, setvalue] = useState('');
     useEffect(() => {
       // Fetch properties from API or data source
       // For demonstration, using static data
@@ -12,7 +14,8 @@ const AllProperty = () => {
        const response = await fetch('http://localhost:3000/properties');
        const data = await response.json();
       //  console.log(data);
-       setProperties(data);
+      setProperties(data)
+       setfilterProperties(data);
       }
       fetchProperties();
     }, []);
@@ -21,9 +24,28 @@ const AllProperty = () => {
       const sortBy = e.target.value;
       const response = fetch(`http://localhost:3000/properties/${sortBy}`)
       .then(res => res.json())
-      .then(data => setProperties(data));
+      .then(data => {
+        setfilterProperties(data)
+      });
 
     };
+    const handleSearch = (e) => {
+      e.preventDefault();
+       if (!value) {
+      // If input is empty, reset to original list
+      setProperties(properties);
+      return;
+    }
+       const filtered = properties.filter((property) => 
+      property.PropertyName.toLowerCase().includes(value.toLowerCase()) ||
+      property.Location.toLowerCase().includes(value.toLowerCase()) ||
+      property.Category.toLowerCase().includes(value.toLowerCase())
+    );
+    setfilterProperties(filtered);
+
+
+    }
+    
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
@@ -48,12 +70,12 @@ const AllProperty = () => {
                     </div>
                     <input
                       className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-black  focus:outline-0 focus:ring-0 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-100 h-full  px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-                      placeholder="Search by Property name..."
-                      defaultValue=""
+                      placeholder="Search by Property name or Location or Category"
+                      onChange={(e)=> setvalue(e.target.value)}
                     />
                   </div>
                 </label>
-                <button className="flex w-full md:w-auto min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-blue-500 text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-blue-400 transition-colors">
+                <button onClick={handleSearch} className="flex w-full md:w-auto min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-blue-500 text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-blue-400 transition-colors">
                   <span className="truncate">Search</span>
                 </button>
               </div>
@@ -75,7 +97,7 @@ const AllProperty = () => {
 
             {/* Property Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {properties && properties.map((property, idx) => <AllPropertyCard key={idx} property={property} idx={idx} />)}
+              {filterproperties && filterproperties.map((property, idx) => <AllPropertyCard key={idx} property={property} idx={idx} />)}
             </div>
 
             {/* Pagination */}
