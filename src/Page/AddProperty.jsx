@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../Context/AuthContext";
+import { toast } from "react-hot-toast";
 
 // AddProperty.jsx
 // Default-exported React component. Uses Tailwind CSS classes (assumes Tailwind already set up).
@@ -6,14 +8,15 @@ import React, { useState, useEffect } from "react";
 //  - user: { name, email }  (optional; falls back to demo values)
 //  - onSubmit: async function(data) => void  (optional; if provided, called with form data)
 
-export default function AddProperty({ user = { name: "John Doe", email: "john.doe@example.com" }, onSubmit } ) {
+export default function AddProperty(  ) {
+  const {user} = useAuth();
   const [form, setForm] = useState({
-    propertyName: "",
-    description: "",
-    category: "For Sale",
-    price: "",
-    location: "",
-    imageUrl: "",
+    PropertyName: "",
+    Description: "",
+    Category: "For Sale",
+    Price: "",
+    Location: "",
+    ImageLink: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -22,9 +25,9 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
 
   useEffect(() => {
     // Simple image preview update with a short debounce
-    const id = setTimeout(() => setPreviewSrc(form.imageUrl || ""), 300);
-    return () => clearTimeout(id);
-  }, [form.imageUrl]);
+    // const id = setTimeout(() => setPreviewSrc(form.ImageLink || ""), 300);
+    // return () => clearTimeout(id);
+  }, [form.ImageLink]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -33,11 +36,11 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
 
   function validate() {
     const e = {};
-    if (!form.propertyName.trim()) e.propertyName = "Property name is required.";
-    if (!form.description.trim()) e.description = "Description is required.";
-    if (!form.location.trim()) e.location = "Location is required.";
-    if (!form.price || Number(form.price) <= 0) e.price = "Enter a valid price.";
-    if (!form.imageUrl && !isValidUrl(form.imageUrl)) e.imageUrl = "Enter a valid image URL.";
+    if (!form.PropertyName.trim()) e.PropertyName = "Property name is required.";
+    if (!form.Description.trim()) e.Description = "Description is required.";
+    if (!form.Location.trim()) e.Location = "Location is required.";
+    if (!form.Price || Number(form.Price) <= 0) e.Price = "Enter a valid Price.";
+    if (!form.ImageLink && !isValidUrl(form.ImageLink)) e.ImageLink = "Enter a valid image URL.";
     return e;
   }
 
@@ -63,26 +66,29 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
 
     const payload = {
       ...form,
-      ownerName: user.name,
-      ownerEmail: user.email,
-      createdAt: new Date().toISOString(),
+      UserName: user.displayName,
+      UserEmail: user.email,
+      Date: new Date().toISOString().split("T")[0],
     };
 
     setSubmitting(true);
     try {
-      if (onSubmit) {
-        await onSubmit(payload);
-      } else {
-        // default behavior: log to console and simulate small delay
-        await new Promise((r) => setTimeout(r, 600));
-        // eslint-disable-next-line no-console
-        console.log("AddProperty payload:", payload);
-      }
+      const response = await fetch('http://localhost:3000/add-property', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to add property");
       setSuccess("Property added successfully.");
-      setForm({ propertyName: "", description: "", category: "For Sale", price: "", location: "", imageUrl: "" });
-      setPreviewSrc("");
+      toast.success("Property added successfully.");
+      setForm({ PropertyName: "", Description: "", Category: "For Sale", Price: "", Location: "", ImageLink: "" });
+      // setPreviewSrc("");
     } catch (err) {
       setErrors({ submit: err?.message || "Failed to submit" });
+      toast.error(err?.message || "Failed to add property.");
     } finally {
       setSubmitting(false);
     }
@@ -102,14 +108,14 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
             <label className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900 dark:text-black pb-2">Property Name</p>
               <input
-                name="propertyName"
-                value={form.propertyName}
+                name="PropertyName"
+                value={form.PropertyName}
                 onChange={handleChange}
                 placeholder="e.g., Sunnyvale Modern Apartment"
-                className={`form-input w-full rounded-lg border ${errors.propertyName ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-300 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 px-4 text-base`}
+                className={`form-input w-full rounded-lg border ${errors.PropertyName ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-300 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 px-4 text-base`}
                 type="text"
               />
-              {errors.propertyName && <span className="mt-1 text-sm text-red-500">{errors.propertyName}</span>}
+              {errors.PropertyName && <span className="mt-1 text-sm text-red-500">{errors.PropertyName}</span>}
             </label>
           </div>
 
@@ -118,13 +124,13 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
             <label className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900 dark:text-black pb-2">Description</p>
               <textarea
-                name="description"
-                value={form.description}
+                name="Description"
+                value={form.Description}
                 onChange={handleChange}
                 placeholder="Describe the key features of your property..."
-                className={`form-input w-full rounded-lg border ${errors.description ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary min-h-36 p-4 text-base`}
+                className={`form-input w-full rounded-lg border ${errors.Description ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary min-h-36 p-4 text-base`}
               />
-              {errors.description && <span className="mt-1 text-sm text-red-500">{errors.description}</span>}
+              {errors.Description && <span className="mt-1 text-sm text-red-500">{errors.Description}</span>}
             </label>
           </div>
 
@@ -133,8 +139,8 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
             <label className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900 dark:text-black pb-2">Category</p>
               <select
-                name="category"
-                value={form.category}
+                name="Category"
+                value={form.Category}
                 onChange={handleChange}
                 className="form-select w-full rounded-lg border border-gray-300 dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black focus:border-primary focus:ring-primary h-12 px-4 text-base"
               >
@@ -153,15 +159,15 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
                   <span className="text-gray-500 dark:text-gray-400 sm:text-sm">$</span>
                 </div>
                 <input
-                  name="price"
-                  value={form.price}
+                  name="Price"
+                  value={form.Price}
                   onChange={handleChange}
                   placeholder="250000"
                   type="number"
-                  className={`form-input block w-full rounded-lg border ${errors.price ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 pl-7 pr-4 text-base`}
+                  className={`form-input block w-full rounded-lg border ${errors.Price ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 pl-7 pr-4 text-base`}
                 />
               </div>
-              {errors.price && <span className="mt-1 text-sm text-red-500">{errors.price}</span>}
+              {errors.Price && <span className="mt-1 text-sm text-red-500">{errors.Price}</span>}
             </label>
           </div>
 
@@ -170,14 +176,14 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
             <label className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900 dark:text-black pb-2">Location</p>
               <input
-                name="location"
-                value={form.location}
+                name="Location"
+                value={form.Location}
                 onChange={handleChange}
                 placeholder="e.g., 123 Main St, Anytown, USA"
                 type="text"
-                className={`form-input w-full rounded-lg border ${errors.location ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 px-4 text-base`}
+                className={`form-input w-full rounded-lg border ${errors.Location ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 px-4 text-base`}
               />
-              {errors.location && <span className="mt-1 text-sm text-red-500">{errors.location}</span>}
+              {errors.Location && <span className="mt-1 text-sm text-red-500">{errors.Location}</span>}
             </label>
           </div>
 
@@ -186,14 +192,14 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
             <label className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900 dark:text-black pb-2">Image URL</p>
               <input
-                name="imageUrl"
-                value={form.imageUrl}
+                name="ImageLink"
+                value={form.ImageLink}
                 onChange={handleChange}
                 placeholder="https://example.com/image.jpg"
                 type="url"
-                className={`form-input w-full rounded-lg border ${errors.imageUrl ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 px-4 text-base`}
+                className={`form-input w-full rounded-lg border ${errors.ImageLink ? "border-red-500" : "border-gray-300"} dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black placeholder:text-gray-400 dark:placeholder:text-gray-400 focus:border-primary focus:ring-primary h-12 px-4 text-base`}
               />
-              {errors.imageUrl && <span className="mt-1 text-sm text-red-500">{errors.imageUrl}</span>}
+              {errors.ImageLink && <span className="mt-1 text-sm text-red-500">{errors.ImageLink}</span>}
             </label>
 
           </div>
@@ -207,7 +213,7 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
             <div>
               <p className="text-sm font-medium leading-6 text-gray-900 dark:text-black pb-2">Your Name</p>
-              <input className="form-input w-full rounded-lg border bg-gray-100 border-gray-300 dark:border-gray-300 dark:bg-gray-100 text-gray-500 dark:text-gray-400  cursor-not-allowed h-12 px-4 text-base" readOnly type="text" value={user.name} />
+              <input className="form-input w-full rounded-lg border bg-gray-100 border-gray-300 dark:border-gray-300 dark:bg-gray-100 text-gray-500 dark:text-gray-400  cursor-not-allowed h-12 px-4 text-base" readOnly type="text" value={user.displayName} />
             </div>
             <div>
               <p className="text-sm font-medium leading-6 text-gray-900 dark:text-black pb-2">Your Email</p>
@@ -224,7 +230,7 @@ export default function AddProperty({ user = { name: "John Doe", email: "john.do
           </div>
 
           <div className="flex gap-3">
-            <button type="button" onClick={() => { setForm({ propertyName: "", description: "", category: "For Sale", price: "", location: "", imageUrl: "" }); setPreviewSrc(""); setErrors({}); }} className="rounded-lg px-4 h-12 border border-gray-300 dark:border-gray-300 bg-white dark:bg-gray-200 text-base font-medium hover:cursor-pointer">Reset</button>
+            <button type="button" onClick={() => { setForm({ PropertyName: "", Description: "", Category: "For Sale", Price: "", Location: "", ImageLink: "" }); setPreviewSrc(""); setErrors({}); }} className="rounded-lg px-4 h-12 border border-gray-300 dark:border-gray-300 bg-white dark:bg-gray-200 text-base font-medium hover:cursor-pointer">Reset</button>
 
             <button type="submit" disabled={submitting} className="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 md:px-6 bg-primary text-white text-md  md:text-base font-bold leading-normal tracking-wide hover:bg-blue-400 bg-blue-400 transition-colors">
               {submitting ? "Adding..." : "Add Property"}
