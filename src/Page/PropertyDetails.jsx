@@ -2,13 +2,69 @@ import React from "react";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { CiLocationOn } from "react-icons/ci";
-import { Link } from "react-router";
-import { useState } from "react";
-
-
+import { Link,useParams } from "react-router";
+import { useState,useEffect } from "react";
+import { useAuth } from "../Context/AuthContext";
+import { toast } from "react-hot-toast";
 
 const PropertyDetails = () => {
+      const {user}  = useAuth();
+      const {id} = useParams();
+      // console.log(id);
+      const[reviewText,setReviewText] = useState('');
       const [rating, setRating] = useState(0);
+      const [property, setProperty] = useState(null);
+      useEffect(() => {
+        // Fetch property details from API or data source
+        const fetchPropertyDetails = async () => {
+          // Simulate an API call
+          const response = await fetch(`http://localhost:3000/property-details/${id}`); // Replace with actual property ID
+          const data = await response.json();
+          setProperty(data);
+        }
+        fetchPropertyDetails();
+      }, []);
+
+      const handleRivewSubmit = async (e) => {
+        e.preventDefault();
+        // Handle review submission logic here
+        const reviewData = {
+
+          rating: rating,
+          review : reviewText,
+          reviewerName: user?.displayName,
+          reviewerEmail: user?.email,
+          PropertyName: property?.PropertyName,
+          Description:property?.Description,
+          ImageLink: property?.ImageLink,
+          Category: property?.Category,
+          Location: property?.Location,
+          Price: property?.Price
+
+        };
+        console.log("Review submitted:", reviewData); 
+        
+       try {
+         const response = await fetch(`http://localhost:3000/create-review`, {
+           method: 'POST',
+           headers: {
+             'Content-Type': 'application/json',
+           },
+           body: JSON.stringify(reviewData),
+         });
+         const result = await response.json();
+         setRating(0);
+         setReviewText('');
+          toast.success("Review submitted successfully");
+        //  console.log('Server response:', result);
+       } catch (error) {
+          toast.error("Failed to submit review");
+        // console.error('Error submitting review:', error);
+        
+       }
+
+      }
+
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-bg-gray-100 dark:bg-gray-100 font-display text-[#111418] dark:text-gray-300">
    
@@ -25,7 +81,7 @@ const PropertyDetails = () => {
                 className="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden rounded-xl min-h-80"
                 style={{
                   backgroundImage:
-                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0iYT-FrMC5wZRnyQi8wQYwOICI1CXSzs2JlcXUmzIBeYXzmJVbQTHEosvYukKlBhZ5w3EuXBNEtA070NWfVqLGeSH0blptiWbCKviDguXKEumzKsleUW7_aliGSVprzirgL_nrcOfKpixXDOVh0PVul9ISfsPn-XH2dS-VJ6YUMstqOIU2naz0LTMw9HkZZ5U6Le01GYGMsUEffFAhZt1sU33qJf03urNk1LCx0KrCfYE7KFXEQhvEoPwMV_SfXMeNMzdVjPkVjA")',
+                    `url(${property?.ImageLink})`,
                   minHeight: "555px",
                 }}
               ></div>
@@ -37,14 +93,18 @@ const PropertyDetails = () => {
             <div className="lg:col-span-2">
               <div className="bg-white dark:bg-white p-6 rounded-xl shadow-sm border border-gray-300 dark:border-gray-300">
                 <p className="text-[#111418] dark:text-black text-3xl font-bold">
-                  Modern Downtown Apartment
+                 {property?.PropertyName}
                 </p>
                 <div className="flex items-center gap-2 text-gray-500 dark:text-gray-500 mt-1">
                  <CiLocationOn/>
-                  <p className="text-sm">123 Main Street, Anytown, USA</p>
+                  <p className="text-sm">
+                    { property?.Location }
+                  </p>
                 </div>
                 <p className="text-blue-400 text-2xl font-bold mt-2">
-                  $2,500/mo
+                  {
+                    property ? (property.Category === 'Rent' ? '$' + property.Price + '/mo' : '$' + property.Price) : ''
+                  } 
                 </p>
 
                 <div className="flex gap-2 flex-wrap mt-4 border-t border-gray-300 dark:border-gray-300  pt-4">
@@ -53,7 +113,9 @@ const PropertyDetails = () => {
                         className={`flex h-8 items-center justify-center gap-x-2 rounded-full px-3 bg-gray-800 dark:bg-gray-800 text-gray-300 dark:text-gray-300 text-sm font-medium
                         `}
                       >
-                        <p>For sale </p>
+                        <p>
+                          {property ? property.Category : ''}
+                        </p>
                       </div>
                   
                 </div>
@@ -64,11 +126,7 @@ const PropertyDetails = () => {
                     Description
                   </h3>
                   <p className="text-gray-500 dark:text-gray-500 text-sm leading-relaxed">
-                    Discover urban living at its finest in this stunning,
-                    fully-furnished apartment. Located in the heart of downtown,
-                    this property offers breathtaking city views, modern
-                    amenities, and convenient access to restaurants, shops, and
-                    entertainment.
+                    {property ? property.Description : ''}
                   </p>
                 </div>
 
@@ -85,11 +143,11 @@ const PropertyDetails = () => {
                     />
                     <div>
                       <p className="font-bold text-[#111418] dark:text-black">
-                        Jane Doe
+                        {property ? property.UserName : ''}
                       </p>
                       <Link
                         className="text-sm text-blue-500 hover:underline"
-                        to="#"
+                       
                       >
                         View Profile
                       </Link>
@@ -130,8 +188,12 @@ const PropertyDetails = () => {
                 <textarea
                   className="w-full rounded-lg border-gray-300 dark:border-gray-300 bg-gray-100 dark:bg-gray-100 p-3 focus:ring-primary focus:border-primary text-sm text-gray-700 dark:text-gray-700 mt-4 min-h-24" 
                   placeholder="Share your experience..."
+                  name="review"
+                  required
+                  value={reviewText}
+                  onChange={(e)=> setReviewText(e.target.value)}
                 ></textarea>
-                <button className="mt-3 h-10 px-4 rounded-lg text-[15px] bg-blue-500 text-white font-bold hover:bg-blue-600 transition-colors hover:cursor-pointer">
+                <button onClick={handleRivewSubmit} className="mt-3 h-10 px-4 rounded-lg text-[15px] bg-blue-500 text-white font-bold hover:bg-blue-600 transition-colors hover:cursor-pointer">
                   Submit Review
                 </button>
               </div>
