@@ -10,21 +10,25 @@ import UpdateProperty from "./Page/UpdateProperty.jsx"
 import MyRating from "./Page/MyRating.jsx"
 import PropertyDetails from "./Page/PropertyDetails.jsx"
 import AllProperty from "./Page/AllProperty.jsx"
+import Layout from "./Layout.jsx"
 function App() {
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route index element={<Navigate to="/home" />} />
-      <Route path="home" element={<HomePage/>}/>
       <Route path="login" element={<LoginPage/>}/>
       <Route path="register" element={<Register/>}/>
+      <Route path="" element={<Layout />} >
+      <Route index element={<Navigate to="/home" />} />
+      <Route path="home" element={<HomePage/>}/>
+      
       <Route path="all-property" element={<AllProperty/>}/>
       <Route path="my-property" element={<PrivateRoute><MyProperty/></PrivateRoute>}/>
       <Route path="add-property" element={<PrivateRoute><AddProperty/></PrivateRoute>}/>
       <Route path="update-property" element={<PrivateRoute><UpdateProperty/></PrivateRoute>}/>
-      <Route path="my-rating" element={<PrivateRoute><MyRating/></PrivateRoute>}/>
+      <Route path="my-ratings" element={<PrivateRoute><MyRating/></PrivateRoute>}/>
       <Route path="property-details" element={<PrivateRoute><PropertyDetails/></PrivateRoute>}/>
+    </Route>
     </Route>
 
 

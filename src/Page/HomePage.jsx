@@ -23,7 +23,7 @@ import { Link } from "react-router";
 
 const HomePage = () => {
   return (<>
-  <Header/>
+  {/* <Header/> */}
     <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col">
         <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -126,7 +126,7 @@ const HomePage = () => {
    
         <div className="flex flex-1 gap-4 rounded-lg bg-white dark:bg-white p-6 flex-col items-center text-center">
           <div className="text-primary flex items-center justify-center h-12 w-12 rounded-full bg-slate-300">
-            <span className="material-symbols-outlined"><MdOutlineVerifiedUser/></span>
+            <span className="material-symbols-outlined"><MdOutlineVerifiedUser size={22}/></span>
           </div>
           <div className="flex flex-col gap-1">
             <h2 className="text-text-light dark:text-text-dark text-lg font-bold leading-tight">Verified Listings</h2>
@@ -135,7 +135,7 @@ const HomePage = () => {
         </div>
         <div className="flex flex-1 gap-4 rounded-lg bg-white dark:bg-white p-6 flex-col items-center text-center">
           <div className="text-primary flex items-center justify-center h-12 w-12 rounded-full bg-slate-300">
-            <span className="material-symbols-outlined"><MdOutlineFilterAlt/></span>
+            <span className="material-symbols-outlined"><MdOutlineFilterAlt size={22}/></span>
           </div>
           <div className="flex flex-col gap-1">
             <h2 className="text-text-light dark:text-text-dark text-lg font-bold leading-tight">Advanced Search Filters</h2>
@@ -144,7 +144,7 @@ const HomePage = () => {
         </div>
         <div className="flex flex-1 gap-4 rounded-lg bg-white dark:bg-white p-6 flex-col items-center text-center">
           <div className="text-primary flex items-center justify-center h-12 w-12 rounded-full bg-slate-200">
-            <span className="material-symbols-outlined"><MdSupportAgent/></span>
+            <span className="material-symbols-outlined"><MdSupportAgent size={22}/></span>
           </div>
           <div className="flex flex-col gap-1">
             <h2 className="text-text-light dark:text-text-dark text-lg font-bold leading-tight">Expert Support</h2>
@@ -220,7 +220,7 @@ const HomePage = () => {
         </main>
       </div>
 
-  <Footer/>
+  {/* <Footer/> */}
      
     </div>
     </>

@@ -35,7 +35,7 @@ const HeroSection = () => {
   <Swiper
   modules={[Navigation, Pagination, Autoplay]}
   pagination={{ clickable: true }}
-  autoplay={{ delay: 400000 }}
+  autoplay={{ delay: 4000 }}
   loop
   onInit={(swiper) => {
     swiper.params.navigation.prevEl = ".swiper-button-prev-custom";
