@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect,useState } from "react";
 
 // components
 import Header from "../Components/Header";
@@ -22,6 +23,18 @@ import person3 from "../assets/person3.png";
 import { Link } from "react-router";
 
 const HomePage = () => {
+  const [properties, setProperties] = useState([]);
+  useEffect(() => {
+    // Fetch properties from API or data source
+    // For demonstration, using static data
+    const fetchProperties = async () => {
+      const data = (await fetch("http://localhost:3000/home-properties"));
+      const result = await data.json();
+      // console.log(result);
+      setProperties(result);
+  }
+    fetchProperties();
+  }, []);
   return (<>
   {/* <Header/> */}
     <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
@@ -86,29 +99,8 @@ const HomePage = () => {
 
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
     {/* Repeat each property card */}
-    {[
-      {
-        type: "For Sale",
-        title: "Modern City Apartment",
-        location: "New York, NY",
-        price: "$850,000",
-        img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDHnEv2YkKt2K3L2arx77bcTmwn5HwIXDs0VUQw5MMlK-CosJkUq-IRyZGP_YTKyIkD1aBWTwig28MS9bni3040vEpnU2COBWohfz3plD5-ZDLKhNtQvlW2UVZXoj-4xtb-UKjdIvc8x3WKhp9xTi3LGizAGq2ytuNX4sA2d2wAHPFBK7N8ngVmGOkz-5ya_9FNoJoY8jRxLMVqwvhEHCXFs5orn0JKDyJr0uYMlnvkzPENDSHq6Br67ArisMchLWaGT9mOs42GqZE",
-      },
-      {
-        type: "For Rent",
-        title: "Cozy Suburban House",
-        location: "Austin, TX",
-        price: "$3,200/mo",
-        img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAc8AfwXXeOEIuzFv-RjuH_wbulO_n0FVt1HLBT9GMzrq32zR9WS_qZ7BcaF0wlSWQMkxqSsW61hbz1D_LkcjMNgnKWFqYrRLyEgonSMf37x428sAuLw7DnIjq62MiA4diCIQLJWUxodzaIpa47wuiivmBEul2H2K7Mt_Pf4p5kGG0ldoUIDTCBPskbQNxqw2aF6jPkfkfs31zOHcygLuGA021OywCwC9QWiTQeknS7v-NraWAVYsuF7jZOIXxyjN3TJxb-nZ4aRQ0",
-      },
-      {
-        type: "For Sale",
-        title: "Luxury Beachfront Villa",
-        location: "Miami, FL",
-        price: "$3,500,000",
-        img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCwGrteulyv6949VBde9xebqAtqTxTWbfl7rE6P2Dr1fUKsJnZ6oKwnNv6IEybNP790STOVTwjZwmqIAHzKOrU_O3m0yXwxRoorOepD7UwC13-LER_C8RULrb7LLVJHz42Yxq-qslh2zRqaztbjCfN-1rtAywolXjoqe-Ckz0faF_SOW_AsGy3ev_6hzkn7oDqHdBAcejUwc97TeaKFakCLh8Sv1jYkdVRUbI86VStz-LX3pFCuiBkRc_KmnqT2-rPc5yJ20b6wz5E",
-      },
-    ].map((property, idx) => <AllPropertyCard key={idx} property={property} idx={idx} />)}
+    
+    {properties.map((property, idx) => <AllPropertyCard key={idx} property={property} idx={idx} />)}
       
   </div>
 </section>

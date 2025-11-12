@@ -1,8 +1,30 @@
 import React from "react";
 import { IoIosSearch } from "react-icons/io";
 import AllPropertyCard from "../Components/AllPropertyCard";
+import { useEffect,useState } from "react";
 
 const AllProperty = () => {
+    const [properties, setProperties] = useState([]);
+    useEffect(() => {
+      // Fetch properties from API or data source
+      // For demonstration, using static data
+      const fetchProperties = async () => {
+       const response = await fetch('http://localhost:3000/properties');
+       const data = await response.json();
+      //  console.log(data);
+       setProperties(data);
+      }
+      fetchProperties();
+    }, []);
+
+    const handleSort = (e) => {
+      const sortBy = e.target.value;
+      const response = fetch(`http://localhost:3000/properties/${sortBy}`)
+      .then(res => res.json())
+      .then(data => setProperties(data));
+
+    };
+
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col">
@@ -27,7 +49,7 @@ const AllProperty = () => {
                     <input
                       className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-black  focus:outline-0 focus:ring-0 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-100 h-full  px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
                       placeholder="Search by Property name..."
-                      value=""
+                      defaultValue=""
                     />
                   </div>
                 </label>
@@ -41,10 +63,11 @@ const AllProperty = () => {
               <div className="flex flex-wrap gap-3 items-center">
                 <select
                     className="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-background-light dark:bg-gray-100  px-5 hover:bg-gray-200 dark:hover:bg-gray-200 transition-colors cursor-pointer font-medium text-sm"
+                    onChange={handleSort}
                   >
-                    <option className="text-sm font-medium ">Sort By </option>
-                    <option className="text-sm font-medium">Newest</option>
-                    <option className="text-sm font-medium">Oldest</option>
+                    {/* <option className="text-sm font-medium " value="desc">Sort By </option> */}
+                    <option className="text-sm font-medium" value="desc">Newest</option>
+                    <option className="text-sm font-medium" value="asc">Oldest</option>
 
                   </select>
               </div>
@@ -52,27 +75,7 @@ const AllProperty = () => {
 
             {/* Property Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[
-                {
-                  type: "For Rent",
-                  title: "Modern Downtown Loft",
-                  location: "San Francisco, CA",
-                  price: "$2,500/mo",
-                  postedBy: "Jane Doe",
-                  image:
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuAPEcZVjF8LG2WgvRTXgeoQ3_Vp5H1s-7t_E8VX7RWhsVQj_NT0OF39d9XiGijYeqJFW-rT7m0FRoMelLrbnPjJ7drQIqhjaHLvVfvrUfL1T3Xjdj0xgFF4Ku60D6naGlj_UUEdsyZuxq2S60tQxKtXYL19_7kW9hXCIYsNwGm0Bc062cxuaEsy2LKIwTjmJleczFYqv6kvhIgF5HsiyPUODyx-f5k5FSWy9lmBmIBzDA2MM17bpctN8HeVLnjHmcmPyi2G1fC1B6I",
-                },
-                {
-                  type: "For Sale",
-                  title: "Cozy Suburban House",
-                  location: "Austin, TX",
-                  price: "$450,000",
-                  postedBy: "John Smith",
-                  image:
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuCRfXTR6J_Ab10C4Ty6TZ0NJOCpuaWCULAdfGSLjLfOm_8M7gBH4NY4rKTxtY91zZLqiFeWTlZfdclKF7pXhavQ4jeaZaLmjHkoniHrrmzPvnBQUow7BqAmJld6Uan0-cM3uh_nbDV-xn0xmhdDir0OLQSYI-HMaWjo3QvhbqHiMg5FqcsCmINnEsn_Pc1DL9mAzygZDxrsGzAmP7Yepctnwu2TzCMYcQ5u7BH1m6HpuRh62wR0yvLqj4K5_dpfCajQK98FTF6CGmY",
-                },
-                // Add other properties here similarly
-              ].map((property, idx) => <AllPropertyCard key={idx} property={property} idx={idx} />)}
+              {properties && properties.map((property, idx) => <AllPropertyCard key={idx} property={property} idx={idx} />)}
             </div>
 
             {/* Pagination */}
