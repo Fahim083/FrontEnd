@@ -2,6 +2,8 @@ import {useState,useEffect} from "react";
 import PropertyCard from "../Components/PropertyCard.jsx";
 import { useAuth } from "../Context/AuthContext.jsx";
 import { Link } from "react-router";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
 
 const MyProperty = () => {
   const {user}  = useAuth();
@@ -23,6 +25,36 @@ const MyProperty = () => {
     };
     fetchMyProperties();
   }, []);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/delete-property/${id}`, {
+          method: 'DELETE',
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          const remaining = myProperty.filter(property => property._id !== id);
+          setMyProperty(remaining);
+          Swal.fire(
+            'Deleted!',
+            'Your property has been deleted.',
+            'success'
+          )
+        });
+        
+      }
+    })
+  };
     // const myProperty = [
     //   {
     //     title: "Modern Downtown Loft",
@@ -86,7 +118,7 @@ const MyProperty = () => {
           {/* Property Cards */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {myProperty.map((property, index) => (
-              <PropertyCard key={index} property={property} />
+              <PropertyCard key={index} property={property} handleDelete={handleDelete} />
               // <article
               //   key={index}
               //   className="flex flex-col overflow-hidden rounded-xl bg-white dark:bg-white shadow-md transition-shadow hover:shadow-lg"

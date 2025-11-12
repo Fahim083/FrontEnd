@@ -10,14 +10,14 @@ const MyRatingCard = ({card}) => {
                 <div className="flex flex-col gap-2">
                   <Link
                     className="text-lg font-bold hover:text-primary transition-colors"
-                    href="#"
+                    to={`/property-details/${card?._id}`}
                   >
-                   {card?.propetyName}
+                   {card?.PropertyName}
                   </Link>
                   <div className="flex items-center gap-1 text-accent">
                               <Rating
       style={{ maxWidth: 180 }}
-      value={3}
+      value={card?.rating}
       readOnly
     />
                   </div>
@@ -26,7 +26,7 @@ const MyRatingCard = ({card}) => {
                   </p>
                 </div>
                 <p className="text-text-secondary-light dark:text-text-secondary-dark text-xs mt-auto">
-                  {card?.date}
+                  Reviewed on {card?.Date}
                 </p>
               </div>
 
@@ -34,7 +34,8 @@ const MyRatingCard = ({card}) => {
                 className="w-full md:w-1/3 h-48 md:h-auto bg-center bg-no-repeat bg-cover rounded-lg flex-1"
                 style={{
                   backgroundImage:
-                    `url('${card?.image}')`,
+                    `url('${card?.ImageLink}')`,
+                    minHeight: '200px'
                 }}
               ></div>
             </div>

@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import{MdEdit} from 'react-icons/md'
 import {MdDelete} from 'react-icons/md'
 
-const PropertyCard = ({property}) => {
+const PropertyCard = ({property,handleDelete}) => {
   return (
      <article
                 key={property._id}
@@ -49,7 +49,7 @@ const PropertyCard = ({property}) => {
                          <MdEdit/>
                         </span>
                       </Link>
-                      <button className="flex items-center justify-center rounded-lg h-9 w-9 bg-red-200 text-destructive dark:bg-red-200 hover:cursor-pointer hover:bg-red-400 dark:hover:bg-red-400">
+                      <button  onClick={ ()=> handleDelete(property._id)} className="flex items-center justify-center rounded-lg h-9 w-9 bg-red-200 text-destructive dark:bg-red-200 hover:cursor-pointer hover:bg-red-400 dark:hover:bg-red-400">
                         <span className="material-symbols-outlined text-lg">
                           <MdDelete/>
                         </span>

@@ -1,11 +1,24 @@
-
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import MyRatingCard from "../Components/MyRatingCard";
-
+import { useState,useEffect } from "react";
+import { useAuth } from "../Context/AuthContext";
+import { Link } from "react-router";
 
 
 const MyRating = () => {
+  const {user} = useAuth();
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      const response = await fetch("http://localhost:3000/my-reviews?gmail="+user?.email);
+      const data = await response.json();
+      setReviews(data);
+    };
+    fetchRatings();
+  }, []);
+
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden text-text-primary-light dark:text-text-primary-dark font-display bg-gray-100 dark:bg-gray-100">
       {/* Main Content */}
@@ -20,7 +33,7 @@ const MyRating = () => {
           <div className="flex flex-col gap-6 p-4">
           
             {/* Card 2 */}
-            <div className="flex bg-white dark:bg-white flex-col md:flex-row items-stretch justify-between gap-6 rounded-xl bg-card-light dark:bg-card-dark p-6 shadow-sm">
+            {/* <div className="flex bg-white dark:bg-white flex-col md:flex-row items-stretch justify-between gap-6 rounded-xl bg-card-light dark:bg-card-dark p-6 shadow-sm">
               <div className="flex flex-1 flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <a
@@ -55,10 +68,10 @@ const MyRating = () => {
                     "url('https://lh3.googleusercontent.com/aida-public/AB6AXuALnr8D7eouWpN98Yy6FhK6ReQQ_3P6P7i5scwdrLOIxvmLS6oECDoA7WrIkWiyIpai25WOFvjgBmRf6lkBi-XjGsNQ6OE1-RlrHsPLN0ZTU_oAvV_D-8RqB9uzg-jaR-lTNtoYlMgUjAI_dIl8qKHqxjHpfOZwq0urvbWf5DG9Gx1NNNLo9nwfPtcy4Gg6BzXOz1cguiZkfuuMNuJEPh8rGTZZBBDGZm-LBTbZWdtAKio6AVpc26HgPXDxV8CtRgI9QDVkZD_8NSE')",
                 }}
               ></div>
-            </div>
+            </div> */}
 
             {/* Card 3 */}
-            <div className="flex flex-col md:flex-row items-stretch justify-between gap-6 rounded-xl bg-card-light dark:bg-card-dark p-6 shadow-sm">
+            {/* <div className="flex flex-col md:flex-row items-stretch justify-between gap-6 rounded-xl bg-card-light dark:bg-card-dark p-6 shadow-sm">
               <div className="flex flex-1 flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <a
@@ -88,10 +101,14 @@ const MyRating = () => {
                     "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4rvQgKuL9VERAUlrpYBsG3ABJcSkvEkWmkA6RxprXVXpB0Ku85JdnrEF_nUgWe3tZpfPxKH8Tznm8aZD-ZrKtkSua1UEuPWy_7-A5LGFuOJ0yL_j82vaqXNeU_c70XjFSZv35caM332M6Z3GB5DMsUwl8k5up6uh6ohBs9nIw5BvKULOTrqHV37AUf4OmDcN_u86FKCuM118v4Hikg9U8qhvKHaJn19sZA8VErUuJ-U4hhH-R2xoiNep8VUeklN9diZZ94g5tQRw')",
                 }}
               ></div>
-            </div>
+            </div> */}
 
-      
-            <MyRatingCard/>    
+              {
+              reviews.map((card, index) => (
+                <MyRatingCard key={index} card={card} />
+              ))
+              }
+            {/* <MyRatingCard/>     */}
             
 
             {/* Empty State */}
@@ -109,9 +126,9 @@ const MyRating = () => {
                 experience with the community. Your feedback helps everyone make
                 better decisions.
               </p>
-              <button className="flex items-center justify-center rounded-lg h-10 px-6 bg-green-600 hover:cursor-pointer text-white text-sm font-bold hover:opacity-90 transition-opacity mt-2 ">
+              <Link to="/all-property" className="flex items-center justify-center rounded-lg h-10 px-6 bg-green-600 hover:cursor-pointer text-white text-sm font-bold hover:opacity-90 transition-opacity mt-2 ">
                 Browse Properties
-              </button>
+              </Link>
             </div>
           </div>
         </div>

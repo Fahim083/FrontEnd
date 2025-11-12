@@ -39,7 +39,8 @@ const PropertyDetails = () => {
           ImageLink: property?.ImageLink,
           Category: property?.Category,
           Location: property?.Location,
-          Price: property?.Price
+          Price: property?.Price,
+          Date: new Date().toISOString().split("T")[0],
 
         };
         console.log("Review submitted:", reviewData); 
