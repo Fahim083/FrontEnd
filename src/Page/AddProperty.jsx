@@ -13,7 +13,7 @@ export default function AddProperty(  ) {
   const [form, setForm] = useState({
     PropertyName: "",
     Description: "",
-    Category: "For Sale",
+    Category: "Sale",
     Price: "",
     Location: "",
     ImageLink: "",
@@ -84,7 +84,7 @@ export default function AddProperty(  ) {
       if (!response.ok) throw new Error(data.message || "Failed to add property");
       setSuccess("Property added successfully.");
       toast.success("Property added successfully.");
-      setForm({ PropertyName: "", Description: "", Category: "For Sale", Price: "", Location: "", ImageLink: "" });
+      setForm({ PropertyName: "", Description: "", Category: "Sale", Price: "", Location: "", ImageLink: "" });
       // setPreviewSrc("");
     } catch (err) {
       setErrors({ submit: err?.message || "Failed to submit" });
@@ -144,8 +144,8 @@ export default function AddProperty(  ) {
                 onChange={handleChange}
                 className="form-select w-full rounded-lg border border-gray-300 dark:border-gray-300 bg-white dark:bg-white text-gray-900 dark:text-black focus:border-primary focus:ring-primary h-12 px-4 text-base"
               >
-                <option>For Sale</option>
-                <option>For Rent</option>
+                <option value="Sale">Sale</option>
+                <option vlaue="Rent">Rent</option>
               </select>
             </label>
           </div>

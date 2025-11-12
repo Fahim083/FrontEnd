@@ -1,45 +1,66 @@
-import React from "react";
+import {useState,useEffect} from "react";
 import PropertyCard from "../Components/PropertyCard.jsx";
+import { useAuth } from "../Context/AuthContext.jsx";
+import { Link } from "react-router";
 
 const MyProperty = () => {
-  const myProperty = [
-              {
-                title: "Modern Downtown Loft",
-                type: "For Rent",
-                location: "123 Main St, Anytown, USA",
-                price: "$2,500 / mo",
-                date: "Oct 26, 2023",
-                image:
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuCw8zngyDvGhfTsN4lxH7Bz6m_XPWDxBQD2mwQgpBB6n9Y5WPUIzcvwgArYcfNYvdGSXiKFCLYHHGlI1LvCLVhG6t-V-uOfDo1PtlCkHyQwvK3bkW-bKPnJvQN-aP2m3upx6CFKctvnM8GA5m49gHSG-DePJL3mD4KaitYLuAYDQo1vaFYnvu6e_iJ37BxiXKsr82fLuDJyyzFWf6O8AJXMJoMbt05UuEeij9EYKCLxQ62OKi1aYWMdjZnD-LFCINAhJiiZ_pEeUXw",
-              },
-              {
-                title: "Cozy Suburban Home",
-                type: "For Sale",
-                location: "456 Oak Ave, Suburbia, USA",
-                price: "$450,000",
-                date: "Oct 22, 2023",
-                image:
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuAdB8tsK-M9_Com77YjVzVPeJFTTZvtB2-6r5K23tcSvZyEi0VdodyUzfSPVsSLU44NfPwuZWBDCc5bOohzOiVT3238iGxuRGHse1SiDm-sZAqLoLSObtyco62C3oazQnPAe2Tk2dIEfuFiRHI43x9sawny_QjEPWE3iMYWHNKMUYK8PJl9j3E0UnFuc2yc8k-uAsSVtrZwRG65Pb9j9htCgpep6yoTvAjI7wyyi_baYJdmcNAlzsLenZ9gF8ev-poMr2yEy6iToMs",
-              },
-              {
-                title: "Sunny Beachfront Condo",
-                type: "For Rent",
-                location: "789 Ocean Dr, Sunnydale, USA",
-                price: "$3,200 / mo",
-                date: "Oct 15, 2023",
-                image:
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuDFdOuDdGIM7PE9fvmc13Ah_09l2IommrRS1MDvnnFSAqkeZbBGo2aTdo1UM2qNWf32umAZtus-fD7jLRD8_Za-iUB4LGf-U-oext_gJr_KYt7z4PhZ7_lxeAVRvqEfc6231KBc-4b6cPuMo9x1M9Uv9BWV4UfO3cMjU-hN6gIaRhuqvTZjN0y8qXo7YWatzZmJPW9434-6uZ7j1AWCpGa-eTNepB-uevHNS-gm6kQMaHrS3r6UdjEKWz0OUblaMEGet6zee82PT64",
-              },
-              {
-                title: "Rustic Mountain Cabin",
-                type: "For Sale",
-                location: "101 Pine Rd, Mountaintop, USA",
-                price: "$375,000",
-                date: "Sep 28, 2023",
-                image:
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuDYO5L8KwXgNlLAUsyBVx3-e8SLimDOtb5oswPNfQwyYfCgV1tofYWXcBjWAfv_cyo6y5l5xJKPBL8tIsXdy8SpMd4yLc93JiPNG0f4LcRxXF1XRuoJ316C7-AUc3cyIhEVS_xiNB6H4w6FiuI_hlX3bysF0rsftPKMTrQTM0uLtb8hcT_qSIoOsCS5E_arhQdor9aq845kPuTYgcOD3B2JpmlGYnhUSdB0OrQ7Yhvp3JTRJU3nmllWdFRxXPST8HZcbuQqhhwTfcI",
-              },
-            ];
+  const {user}  = useAuth();
+  const [myProperty, setMyProperty] = useState([]);
+  
+  useEffect(() => {
+    // Fetch or initialize your property data here
+    const fetchMyProperties = async () => {
+      const response = await fetch('http://localhost:3000/my-properties?gmail='+user?.email,
+      {method: 'GET',
+        headers: {
+        'Content-Type': 'application/json', 
+      },
+
+    });
+      const data = await response.json();
+      console.log(data);
+      setMyProperty(data);
+    };
+    fetchMyProperties();
+  }, []);
+    // const myProperty = [
+    //   {
+    //     title: "Modern Downtown Loft",
+    //     type: "For Rent",
+    //     location: "123 Main St, Anytown, USA",
+    //             price: "$2,500 / mo",
+    //             date: "Oct 26, 2023",
+    //             image:
+    //               "https://lh3.googleusercontent.com/aida-public/AB6AXuCw8zngyDvGhfTsN4lxH7Bz6m_XPWDxBQD2mwQgpBB6n9Y5WPUIzcvwgArYcfNYvdGSXiKFCLYHHGlI1LvCLVhG6t-V-uOfDo1PtlCkHyQwvK3bkW-bKPnJvQN-aP2m3upx6CFKctvnM8GA5m49gHSG-DePJL3mD4KaitYLuAYDQo1vaFYnvu6e_iJ37BxiXKsr82fLuDJyyzFWf6O8AJXMJoMbt05UuEeij9EYKCLxQ62OKi1aYWMdjZnD-LFCINAhJiiZ_pEeUXw",
+    //           },
+    //           {
+    //             title: "Cozy Suburban Home",
+    //             type: "For Sale",
+    //             location: "456 Oak Ave, Suburbia, USA",
+    //             price: "$450,000",
+    //             date: "Oct 22, 2023",
+    //             image:
+    //               "https://lh3.googleusercontent.com/aida-public/AB6AXuAdB8tsK-M9_Com77YjVzVPeJFTTZvtB2-6r5K23tcSvZyEi0VdodyUzfSPVsSLU44NfPwuZWBDCc5bOohzOiVT3238iGxuRGHse1SiDm-sZAqLoLSObtyco62C3oazQnPAe2Tk2dIEfuFiRHI43x9sawny_QjEPWE3iMYWHNKMUYK8PJl9j3E0UnFuc2yc8k-uAsSVtrZwRG65Pb9j9htCgpep6yoTvAjI7wyyi_baYJdmcNAlzsLenZ9gF8ev-poMr2yEy6iToMs",
+    //           },
+    //           {
+    //             title: "Sunny Beachfront Condo",
+    //             type: "For Rent",
+    //             location: "789 Ocean Dr, Sunnydale, USA",
+    //             price: "$3,200 / mo",
+    //             date: "Oct 15, 2023",
+    //             image:
+    //               "https://lh3.googleusercontent.com/aida-public/AB6AXuDFdOuDdGIM7PE9fvmc13Ah_09l2IommrRS1MDvnnFSAqkeZbBGo2aTdo1UM2qNWf32umAZtus-fD7jLRD8_Za-iUB4LGf-U-oext_gJr_KYt7z4PhZ7_lxeAVRvqEfc6231KBc-4b6cPuMo9x1M9Uv9BWV4UfO3cMjU-hN6gIaRhuqvTZjN0y8qXo7YWatzZmJPW9434-6uZ7j1AWCpGa-eTNepB-uevHNS-gm6kQMaHrS3r6UdjEKWz0OUblaMEGet6zee82PT64",
+    //           },
+    //           {
+    //             title: "Rustic Mountain Cabin",
+    //             type: "For Sale",
+    //             location: "101 Pine Rd, Mountaintop, USA",
+    //             price: "$375,000",
+    //             date: "Sep 28, 2023",
+    //             image:
+    //               "https://lh3.googleusercontent.com/aida-public/AB6AXuDYO5L8KwXgNlLAUsyBVx3-e8SLimDOtb5oswPNfQwyYfCgV1tofYWXcBjWAfv_cyo6y5l5xJKPBL8tIsXdy8SpMd4yLc93JiPNG0f4LcRxXF1XRuoJ316C7-AUc3cyIhEVS_xiNB6H4w6FiuI_hlX3bysF0rsftPKMTrQTM0uLtb8hcT_qSIoOsCS5E_arhQdor9aq845kPuTYgcOD3B2JpmlGYnhUSdB0OrQ7Yhvp3JTRJU3nmllWdFRxXPST8HZcbuQqhhwTfcI",
+    //           },
+    //         ];
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
 
@@ -53,13 +74,13 @@ const MyProperty = () => {
                 My Properties
               </h1>
               <p className="text-subtext-light dark:text-subtext-dark text-base font-normal">
-                You have 4 active listings.
+                You have {myProperty.length} active listings.
               </p>
             </div>
-            <button className="flex items-center justify-center gap-2 rounded-lg h-10 px-5 bg-blue-500 text-white text-sm font-bold shadow-sm hover:bg-blue-600 hover:cursor-pointer">
+            <Link to="/add-property" className="flex items-center justify-center gap-2 rounded-lg h-10 px-5 bg-blue-500 text-white text-sm font-bold shadow-sm hover:bg-blue-600 hover:cursor-pointer">
 
               <span className="truncate">Add New Property</span>
-            </button>
+            </Link>
           </div>
 
           {/* Property Cards */}

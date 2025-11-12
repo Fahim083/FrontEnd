@@ -25,7 +25,7 @@ const router = createBrowserRouter(
       <Route path="all-property" element={<AllProperty/>}/>
       <Route path="my-property" element={<PrivateRoute><MyProperty/></PrivateRoute>}/>
       <Route path="add-property" element={<PrivateRoute><AddProperty/></PrivateRoute>}/>
-      <Route path="update-property" element={<PrivateRoute><UpdateProperty/></PrivateRoute>}/>
+      <Route path="update-property/:id" element={<PrivateRoute><UpdateProperty/></PrivateRoute>}/>
       <Route path="my-ratings" element={<PrivateRoute><MyRating/></PrivateRoute>}/>
       <Route path="property-details" >
         <Route path=":id" element={<PrivateRoute><PropertyDetails/></PrivateRoute>}/>
