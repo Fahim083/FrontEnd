@@ -11,6 +11,7 @@ import MyRating from "./Page/MyRating.jsx"
 import PropertyDetails from "./Page/PropertyDetails.jsx"
 import AllProperty from "./Page/AllProperty.jsx"
 import Layout from "./Layout.jsx"
+import ErrorPage from "./Page/ErrorPage.jsx"
 function App() {
 
 const router = createBrowserRouter(
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
         <Route path=":id" element={<PrivateRoute><PropertyDetails/></PrivateRoute>}/>
          </Route>
     </Route>
+      <Route path="*" element={<ErrorPage></ErrorPage>} />
     </Route>
 
 

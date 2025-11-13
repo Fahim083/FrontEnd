@@ -6,7 +6,7 @@ Built using **React, Firebase Authentication, TailwindCSS, and MongoDB (via API)
 ---
 
 ## 🌐 Live Site URL
-[👉 Visit HomeNest Live](https://your-client-live-link.netlify.app)
+[👉 Visit HomeNest Live](https://homenests.netlify.app/home)
 
 ---
 
