@@ -1,16 +1,38 @@
-# React + Vite
+# 🏡 HomeNest — Real Estate Listing Platform (Client Side)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+HomeNest is a real estate listing platform where property owners can post available rentals or sales listings, and users can browse, search, and filter properties by location, price, or type.  
+Built using **React, Firebase Authentication, TailwindCSS, and MongoDB (via API)**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Site URL
+[👉 Visit HomeNest Live](https://your-client-live-link.netlify.app)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔐 **Secure Authentication** — Email/password and Google-based login with Firebase.
+- 🏠 **Add, Edit, and Manage Properties** — Authenticated users can add or update their listings.
+- 🌟 **Ratings & Reviews** — Users can review and rate properties.
+- 🧭 **Dynamic Routing with Protected Routes** — Private pages like “My Properties” and “Add Property”.
+- 📱 **Fully Responsive Design** — Clean and modern UI using Tailwind CSS.
+- 🎉 **Toast Notifications** — All success/error messages shown via toast or sweetalert (no browser alerts).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ⚙️ Tech Stack
+
+**Frontend:**
+- React.js (Vite)
+- React Router DOM
+- Tailwind CSS
+- Firebase Authentication
+- Axios (for API requests)
+- SweetAlert2 / React Hot Toast
+- React Icons / Material Icons
+
+---
+
+## 📂 Folder Structure
+
