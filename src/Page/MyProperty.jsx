@@ -12,7 +12,7 @@ const MyProperty = () => {
   useEffect(() => {
     // Fetch or initialize your property data here
     const fetchMyProperties = async () => {
-      const response = await fetch('http://localhost:3000/my-properties?gmail='+user?.email,
+      const response = await fetch('https://back-end-henna-six.vercel.app/my-properties?gmail='+user?.email,
       {method: 'GET',
         headers: {
         'Content-Type': 'application/json', 
@@ -37,7 +37,7 @@ const MyProperty = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/delete-property/${id}`, {
+        fetch(`https://back-end-henna-six.vercel.app/delete-property/${id}`, {
           method: 'DELETE',
         })
         .then(res => res.json())

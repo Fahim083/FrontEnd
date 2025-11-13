@@ -34,5 +34,4 @@ Built using **React, Firebase Authentication, TailwindCSS, and MongoDB (via API)
 
 ---
 
-## 📂 Folder Structure
 

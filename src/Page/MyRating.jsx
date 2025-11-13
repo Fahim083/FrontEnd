@@ -10,9 +10,10 @@ const MyRating = () => {
   const {user} = useAuth();
   const [reviews, setReviews] = useState([]);
 
+
   useEffect(() => {
     const fetchRatings = async () => {
-      const response = await fetch("http://localhost:3000/my-reviews?gmail="+user?.email);
+      const response = await fetch("https://back-end-henna-six.vercel.app/my-reviews?gmail="+user?.email);
       const data = await response.json();
       setReviews(data);
     };
@@ -103,10 +104,8 @@ const MyRating = () => {
               ></div>
             </div> */}
 
-              {
-              reviews.map((card, index) => (
-                <MyRatingCard key={index} card={card} />
-              ))
+              { reviews.length === 0 ? reviews.map((card, index) => (<MyRatingCard key={index} card={card} />)) : null 
+            
               }
             {/* <MyRatingCard/>     */}
             

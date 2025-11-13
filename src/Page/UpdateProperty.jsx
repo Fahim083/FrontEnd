@@ -10,7 +10,7 @@ useEffect(() => {
   // Fetch property details from API or data source using the id
   const fetchPropertyDetails = async () => {
     // Simulate an API call
-    const response = await fetch(`http://localhost:3000/property-details/${id}`); // Replace with actual property ID
+    const response = await fetch(`https://back-end-henna-six.vercel.app/property-details/${id}`); // Replace with actual property ID
     const data = await response.json();
     // Populate form with fetched data
     console.log(data);
@@ -32,7 +32,7 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      const response = await fetch(`http://localhost:3000/update-property/${id}`, {
+      const response = await fetch(`https://back-end-henna-six.vercel.app/update-property/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

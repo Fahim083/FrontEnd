@@ -28,7 +28,7 @@ const HomePage = () => {
     // Fetch properties from API or data source
     // For demonstration, using static data
     const fetchProperties = async () => {
-      const data = (await fetch("http://localhost:3000/home-properties"));
+      const data = (await fetch("https://back-end-henna-six.vercel.app/home-properties"));
       const result = await data.json();
       // console.log(result);
       setProperties(result);

@@ -11,7 +11,7 @@ const AllProperty = () => {
       // Fetch properties from API or data source
       // For demonstration, using static data
       const fetchProperties = async () => {
-       const response = await fetch('http://localhost:3000/properties');
+       const response = await fetch('https://back-end-henna-six.vercel.app/properties');
        const data = await response.json();
       //  console.log(data);
       setProperties(data)
@@ -22,7 +22,7 @@ const AllProperty = () => {
 
     const handleSort = (e) => {
       const sortBy = e.target.value;
-      const response = fetch(`http://localhost:3000/properties/${sortBy}`)
+      const response = fetch(`https://back-end-henna-six.vercel.app/properties/${sortBy}`)
       .then(res => res.json())
       .then(data => {
         setfilterProperties(data)
